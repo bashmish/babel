@@ -28,8 +28,8 @@ export default function ({ types: t }) {
         let templateName = "taggedTemplateLiteral";
         if (state.opts.loose) templateName += "Loose";
 
-        const templateObject = state.file.addTemplateObject(templateName, strings, raw);
-        args.push(templateObject);
+        const templateHelperId = state.file.addHelper(templateName);
+        args.push(t.callExpression(templateHelperId, [strings, raw]));
 
         args = args.concat(quasi.expressions);
 

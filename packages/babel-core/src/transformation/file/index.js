@@ -315,34 +315,6 @@ export default class File extends Store {
     return uid;
   }
 
-  addTemplateObject(
-    helperName: string,
-    strings: Array<Object>,
-    raw: Object,
-  ): Object {
-    // Generate a unique name based on the string literals so we dedupe
-    // identical strings used in the program.
-    const stringIds = raw.elements.map(function(string) {
-      return string.value;
-    });
-    const name = `${helperName}_${raw.elements.length}_${stringIds.join(",")}`;
-
-    const declar = this.declarations[name];
-    if (declar) return declar;
-
-    const uid = this.declarations[name] = this.scope.generateUidIdentifier("templateObject");
-
-    const helperId = this.addHelper(helperName);
-    const init = t.callExpression(helperId, [strings, raw]);
-    init._compact = true;
-    this.scope.push({
-      id: uid,
-      init: init,
-      _blockHoist: 1.9 // This ensures that we don't fail if not using function expression helpers
-    });
-    return uid;
-  }
-
   buildCodeFrameError(node: Object, msg: string, Error: typeof Error = SyntaxError): Error {
     const loc = node && (node.loc || node._loc);
 
